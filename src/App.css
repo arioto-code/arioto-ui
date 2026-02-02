@@ -1,38 +1,524 @@
-.App {
-  text-align: center;
+:root {
+  --arioto-bg: #fcf7f3;
+  --arioto-bg-alt: #ffffff;
+  --arioto-accent: #d97757;
+  --arioto-accent-soft: rgba(217, 119, 87, 0.12);
+  --arioto-text-main: #221b16;
+  --arioto-text-muted: #6b5a50;
+  --arioto-border-subtle: rgba(0, 0, 0, 0.06);
+  --arioto-radius-lg: 20px;
+  --arioto-radius-xl: 28px;
+  --arioto-shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.08);
 }
 
-.App-logo {
-  height: 40vmin;
+.arioto-app {
+  min-height: 100vh;
+  background: radial-gradient(circle at top left, #fde9d8 0, transparent 55%),
+    radial-gradient(circle at top right, #f7e3f7 0, transparent 55%),
+    radial-gradient(circle at bottom, #e3f4f1 0, transparent 60%),
+    var(--arioto-bg);
+  color: var(--arioto-text-main);
+  padding: 24px 18px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+@media (min-width: 768px) {
+  .arioto-app {
+    padding: 32px 40px 40px;
+  }
+}
+
+@media (min-width: 1120px) {
+  .arioto-app {
+    padding: 40px 72px 56px;
+  }
+}
+
+.arioto-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(16px);
+  background: linear-gradient(
+      to bottom,
+      rgba(252, 247, 243, 0.9),
+      rgba(252, 247, 243, 0.7),
+      transparent
+    );
+  padding-bottom: 8px;
+}
+
+.arioto-logo-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.arioto-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  object-fit: cover;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.arioto-brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.arioto-brand-name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.arioto-tagline {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--arioto-text-muted);
+}
+
+.arioto-nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 0.9rem;
+}
+
+.arioto-nav a {
+  text-decoration: none;
+  color: var(--arioto-text-muted);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  position: relative;
+  padding-bottom: 4px;
+}
+
+.arioto-nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #f97316, #ec4899);
+  transition: width 0.18s ease-out;
+}
+
+.arioto-nav a:hover::after,
+.arioto-nav a:focus-visible::after {
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  .arioto-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .arioto-nav {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+}
+
+.arioto-hero {
+  display: grid;
+  gap: 24px;
+  margin-top: 12px;
+}
+
+@media (min-width: 960px) {
+  .arioto-hero {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    align-items: stretch;
+  }
+}
+
+.arioto-hero-content {
+  padding: 24px 22px 26px;
+  border-radius: var(--arioto-radius-xl);
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.94),
+      rgba(255, 249, 244, 0.98)
+    );
+  box-shadow: var(--arioto-shadow-soft);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+@media (min-width: 768px) {
+  .arioto-hero-content {
+    padding: 32px 32px 34px;
+  }
+}
+
+.arioto-eyebrow {
+  font-size: 0.85rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--arioto-text-muted);
+  margin: 0 0 10px;
+}
+
+.arioto-hero-title {
+  font-size: clamp(2rem, 3vw + 1rem, 2.9rem);
+  line-height: 1.1;
+  margin: 0 0 12px;
+  letter-spacing: 0.02em;
+}
+
+.arioto-hero-subtitle {
+  margin: 0 0 18px;
+  font-size: 0.98rem;
+  color: var(--arioto-text-muted);
+  max-width: 32rem;
+}
+
+.arioto-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.btn-primary,
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: transform 0.1s ease-out, box-shadow 0.1s ease-out, background 0.15s ease-out,
+    color 0.15s ease-out;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #f97316, #f97316 40%, #ec4899);
+  color: #fff;
+  box-shadow: 0 16px 30px rgba(248, 113, 113, 0.35);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 22px 45px rgba(248, 113, 113, 0.42);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.88);
+  color: var(--arioto-text-main);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 1);
+}
+
+.full-width {
+  width: 100%;
+}
+
+.arioto-hero-card {
+  border-radius: var(--arioto-radius-xl);
+  background: radial-gradient(
+      circle at top left,
+      rgba(248, 113, 113, 0.16),
+      transparent 60%
+    ),
+    radial-gradient(circle at bottom right, rgba(244, 114, 182, 0.18), transparent 65%),
+    rgba(18, 12, 10, 0.96);
+  color: #fef9f5;
+  padding: 22px 22px 24px;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.45);
+}
+
+@media (min-width: 768px) {
+  .arioto-hero-card {
+    padding: 26px 26px 30px;
+  }
+}
+
+.arioto-hero-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.22), transparent 60%),
+    radial-gradient(circle at 100% 100%, rgba(249, 250, 251, 0.06), transparent 65%);
+  opacity: 0.75;
+  mix-blend-mode: soft-light;
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.arioto-hero-card-title {
+  position: relative;
+  z-index: 1;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+
+.arioto-hero-card-body {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: 0.95rem;
+  color: rgba(249, 250, 251, 0.85);
+}
+
+.arioto-section {
+  margin-top: 28px;
+}
+
+@media (min-width: 960px) {
+  .arioto-section {
+    margin-top: 36px;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.arioto-section-header {
   display: flex;
   flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.arioto-section-header h2 {
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+.arioto-section-header p {
+  margin: 0;
+  color: var(--arioto-text-muted);
+  font-size: 0.95rem;
+}
+
+.arioto-products-section {
+  padding: 20px 18px 22px;
+  border-radius: var(--arioto-radius-xl);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+@media (min-width: 768px) {
+  .arioto-products-section {
+    padding: 26px 26px 28px;
+  }
+}
+
+.arioto-product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 16px;
+}
+
+.arioto-product-card {
+  background: var(--arioto-bg-alt);
+  border-radius: var(--arioto-radius-lg);
+  border: 1px solid var(--arioto-border-subtle);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.05);
+}
+
+.arioto-product-image-wrapper {
+  position: relative;
+  padding-bottom: 70%;
+  overflow: hidden;
+}
+
+.arioto-product-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.25s ease-out;
+}
+
+.arioto-product-card:hover .arioto-product-image {
+  transform: scale(1.03);
+}
+
+.arioto-product-content {
+  padding: 14px 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.arioto-product-content h3 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.arioto-product-description {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--arioto-text-muted);
+}
+
+.arioto-product-footer {
+  margin-top: 10px;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  justify-content: space-between;
+  gap: 10px;
 }
 
-.App-link {
-  color: #61dafb;
+.arioto-product-price {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--arioto-accent);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.arioto-product-cta {
+  border-radius: 999px;
+  padding: 6px 14px;
+  border: none;
+  background: var(--arioto-accent-soft);
+  color: var(--arioto-accent);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.arioto-product-cta:hover {
+  background: rgba(217, 119, 87, 0.2);
+}
+
+.arioto-contact-section {
+  padding: 20px 18px 22px;
+  border-radius: var(--arioto-radius-xl);
+  background: rgba(17, 24, 39, 0.97);
+  color: #f9fafb;
+  box-shadow: 0 22px 55px rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+@media (min-width: 768px) {
+  .arioto-contact-section {
+    padding: 26px 26px 26px;
   }
-  to {
-    transform: rotate(360deg);
+}
+
+.arioto-contact-section .arioto-section-header h2 {
+  color: #f9fafb;
+}
+
+.arioto-contact-section .arioto-section-header p {
+  color: #e5e7eb;
+}
+
+.arioto-contact-layout {
+  display: grid;
+  gap: 18px;
+}
+
+@media (min-width: 900px) {
+  .arioto-contact-layout {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr);
   }
+}
+
+.arioto-contact-details h3 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+}
+
+.arioto-contact-details p {
+  margin: 4px 0;
+  font-size: 0.95rem;
+  color: #e5e7eb;
+}
+
+.arioto-contact-details a {
+  color: #fbbf24;
+  text-decoration: none;
+}
+
+.arioto-contact-details a:hover {
+  text-decoration: underline;
+}
+
+.arioto-contact-form {
+  background: rgba(15, 23, 42, 0.8);
+  border-radius: 18px;
+  padding: 16px 16px 18px;
+  border: 1px solid rgba(55, 65, 81, 0.8);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.arioto-contact-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.85rem;
+  color: #e5e7eb;
+}
+
+.arioto-contact-form input,
+.arioto-contact-form textarea {
+  border-radius: 10px;
+  border: 1px solid rgba(75, 85, 99, 0.95);
+  padding: 8px 10px;
+  background: rgba(15, 23, 42, 0.8);
+  color: #f9fafb;
+  font: inherit;
+  resize: vertical;
+}
+
+.arioto-contact-form input:focus,
+.arioto-contact-form textarea:focus {
+  outline: 2px solid #f97316;
+  outline-offset: 1px;
+  border-color: transparent;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.arioto-footer {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(148, 163, 184, 0.35);
+  font-size: 0.82rem;
+  color: var(--arioto-text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.arioto-footer-sub {
+  opacity: 0.9;
 }
