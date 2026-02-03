@@ -412,6 +412,88 @@
   background: rgba(217, 119, 87, 0.2);
 }
 
+.arioto-product-image-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+  color: var(--arioto-text-muted);
+  font-size: 0.85rem;
+}
+
+/* Loading, Error, and Empty States */
+.arioto-loading-state,
+.arioto-error-state,
+.arioto-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+  min-height: 200px;
+}
+
+.arioto-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--arioto-accent-soft);
+  border-top-color: var(--arioto-accent);
+  border-radius: 50%;
+  animation: arioto-spin 0.8s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes arioto-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.arioto-loading-state p {
+  color: var(--arioto-text-muted);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.arioto-error-state {
+  background: rgba(239, 68, 68, 0.08);
+  border-radius: var(--arioto-radius-lg);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.arioto-error-message {
+  color: #dc2626;
+  font-weight: 600;
+  font-size: 1rem;
+  margin: 0 0 8px;
+}
+
+.arioto-error-help {
+  color: var(--arioto-text-muted);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.arioto-empty-state {
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: var(--arioto-radius-lg);
+  border: 1px dashed var(--arioto-border-subtle);
+}
+
+.arioto-empty-state p {
+  color: var(--arioto-text-main);
+  font-size: 1rem;
+  margin: 0 0 4px;
+}
+
+.arioto-empty-sub {
+  color: var(--arioto-text-muted);
+  font-size: 0.9rem;
+}
+
 .arioto-contact-section {
   padding: 20px 18px 22px;
   border-radius: var(--arioto-radius-xl);
