@@ -7,6 +7,7 @@ function App() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeProduct, setActiveProduct] = useState(null);
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -87,13 +88,6 @@ function App() {
               </a>
             </div>
           </div>
-          <div className="arioto-hero-card">
-            <p className="arioto-hero-card-title">Made by hand, not haste</p>
-            <p className="arioto-hero-card-body">
-              Every Arioto piece is thoughtfully crafted in small batches, using natural materials,
-              traditional techniques, and a whole lot of heart.
-            </p>
-          </div>
         </section>
 
         <section id="products" className="arioto-section arioto-products-section">
@@ -128,7 +122,11 @@ function App() {
           {!loading && !error && products.length > 0 && (
             <div className="arioto-product-grid">
               {products.map((product) => (
-                <article key={product.id} className="arioto-product-card">
+                <article
+                  key={product.id}
+                  className="arioto-product-card arioto-product-card-clickable"
+                  onClick={() => setActiveProduct(product)}
+                >
                   <div className="arioto-product-image-wrapper">
                     {product.image ? (
                       <img 
@@ -215,6 +213,61 @@ function App() {
           </div>
         </section>
       </main>
+
+      {activeProduct && (
+        <div
+          className="arioto-modal-backdrop"
+          onClick={() => setActiveProduct(null)}
+        >
+          <div
+            className="arioto-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="arioto-product-modal-title"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="arioto-modal-close"
+              onClick={() => setActiveProduct(null)}
+              aria-label="Close product details"
+            >
+              ×
+            </button>
+            <div className="arioto-modal-content">
+              <div className="arioto-modal-image-wrapper">
+                {activeProduct.image ? (
+                  <img
+                    src={activeProduct.image}
+                    alt={activeProduct.name}
+                    className="arioto-modal-image"
+                  />
+                ) : (
+                  <div className="arioto-modal-image-placeholder">
+                    <span>No image</span>
+                  </div>
+                )}
+              </div>
+              <div className="arioto-modal-details">
+                <h2 id="arioto-product-modal-title">{activeProduct.name}</h2>
+                {activeProduct.price && (
+                  <p className="arioto-modal-price">{activeProduct.price}</p>
+                )}
+                {activeProduct.description && (
+                  <p className="arioto-modal-description">
+                    {activeProduct.description}
+                  </p>
+                )}
+                <p className="arioto-modal-note">
+                  Each Arioto piece is handmade in small batches. For
+                  customisation or bulk orders, please reach out to us from the
+                  contact section.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <footer className="arioto-footer">
         <p>© {new Date().getFullYear()} Arioto. All rights reserved.</p>
