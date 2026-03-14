@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import Papa from 'papaparse';
 import './App.css';
-import logo from './OriginakLogo.png';
+import logo from './OriginalLogo.jpg';
 
 function App() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeProduct, setActiveProduct] = useState(null);
+  const [contactStatus, setContactStatus] = useState({ state: 'idle', message: '' });
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -30,7 +31,8 @@ function App() {
             const parsedProducts = results.data.map((row, index) => ({
               id: parseInt(row.id) || index + 1,
               name: row.name || '',
-              description: row.description || '',
+              shortdesc: row.shortdesc || '',
+              longdesc: row.longdesc || '',
               price: row.price || '',
               image: row.image || '',
             })).filter(product => product.name); // Filter out empty rows
@@ -51,6 +53,34 @@ function App() {
 
     loadProducts();
   }, []);
+
+  const submitContact = async ({ name, email, message }) => {
+    const endpoint = process.env.REACT_APP_CONTACT_ENDPOINT;
+    if (!endpoint) {
+      throw new Error(
+        'Missing contact endpoint. Set REACT_APP_CONTACT_ENDPOINT to your Google Apps Script Web App URL.'
+      );
+    }
+
+    const body = new URLSearchParams({
+      name,
+      email,
+      message,
+      createdAt: new Date().toISOString(),
+    });
+
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      // Let the browser set application/x-www-form-urlencoded; this avoids a CORS preflight.
+      body,
+    });
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => '');
+      throw new Error(text || 'Failed to submit message');
+    }
+  };
+
   return (
     <div className="arioto-app">
       <header className="arioto-header">
@@ -143,15 +173,15 @@ function App() {
                   </div>
                   <div className="arioto-product-content">
                     <h3>{product.name}</h3>
-                    {product.description && (
-                      <p className="arioto-product-description">{product.description}</p>
+                    {product.shortdesc && (
+                      <p className="arioto-product-description">{product.shortdesc}</p>
                     )}
                     <div className="arioto-product-footer">
                       {product.price && (
                         <span className="arioto-product-price">{product.price}</span>
                       )}
                       <button type="button" className="arioto-product-cta">
-                        Enquire
+                        Details
                       </button>
                     </div>
                   </div>
@@ -172,15 +202,34 @@ function App() {
           <div className="arioto-contact-layout">
             <div className="arioto-contact-details">
               <h3>Say hello</h3>
-              <p>Email: <a href="mailto:hello@arioto.studio">hello@arioto.studio</a></p>
-              <p>Instagram: <a href="https://instagram.com" target="_blank" rel="noreferrer">@arioto.studio</a></p>
+              <p>Email: <a href="mailto:arioto.handmades@gmail.com">arioto.handmades@gmail.com</a></p>
+              <p>Instagram: <a href="https://www.instagram.com/arioto_handmades/" target="_blank" rel="noreferrer">@arioto_handmades</a></p>
               <p>Location: Based in India, shipping pan-India.</p>
             </div>
             <form
               className="arioto-contact-form"
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault();
-                alert('Thank you for reaching out to Arioto! We will get back to you soon.');
+                const form = e.currentTarget;
+                const formData = new FormData(form);
+                const name = String(formData.get('name') || '').trim();
+                const email = String(formData.get('email') || '').trim();
+                const message = String(formData.get('message') || '').trim();
+
+                try {
+                  setContactStatus({ state: 'submitting', message: '' });
+                  await submitContact({ name, email, message });
+                  form.reset();
+                  setContactStatus({
+                    state: 'success',
+                    message: 'Thanks! Your message has been sent.',
+                  });
+                } catch (err) {
+                  setContactStatus({
+                    state: 'error',
+                    message: err instanceof Error ? err.message : 'Something went wrong.',
+                  });
+                }
               }}
             >
               <div className="form-row">
@@ -207,8 +256,18 @@ function App() {
                 </label>
               </div>
               <button type="submit" className="btn-primary full-width">
-                Send message
+                {contactStatus.state === 'submitting' ? 'Sending…' : 'Send message'}
               </button>
+              {contactStatus.state === 'success' && (
+                <p className="arioto-form-success" role="status">
+                  {contactStatus.message}
+                </p>
+              )}
+              {contactStatus.state === 'error' && (
+                <p className="arioto-form-error" role="alert">
+                  {contactStatus.message}
+                </p>
+              )}
             </form>
           </div>
         </section>
@@ -253,10 +312,8 @@ function App() {
                 {activeProduct.price && (
                   <p className="arioto-modal-price">{activeProduct.price}</p>
                 )}
-                {activeProduct.description && (
-                  <p className="arioto-modal-description">
-                    {activeProduct.description}
-                  </p>
+                {activeProduct.longdesc && (
+                  <p className="arioto-modal-description"> {activeProduct.longdesc }</p>
                 )}
                 <p className="arioto-modal-note">
                   Each Arioto piece is handmade in small batches. For
